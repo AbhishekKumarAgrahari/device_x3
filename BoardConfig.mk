@@ -2,6 +2,8 @@
 
 DEVICE_PATH := device/leeco/x3
 
+TARGET_BOARD_KERNEL_HEADERS := $(DEVICE_PATH)/kernel-headers
+
 TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/include
 
 MTK_K64_SUPPORT := yes
