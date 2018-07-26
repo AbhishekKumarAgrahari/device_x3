@@ -14,19 +14,33 @@
 // limitations under the License.
 //
 
-#define LOG_TAG "android.hardware.bluetooth@1.0-service-mediatek"
+#define LOG_TAG "android.hardware.bluetooth@1.0-service.mtk"
 
 #include <android/hardware/bluetooth/1.0/IBluetoothHci.h>
+#include <hidl/HidlSupport.h>
+#include <android-base/logging.h>
+#include <hidl/HidlTransportSupport.h>
+#include <utils/Errors.h>
+#include <utils/StrongPointer.h>
 
-#include <hidl/LegacySupport.h>
+#include "bluetooth_hci.h"
 
-// Extra threads make priority inheritance faster.
-static const size_t kMaxThreads = 5;
-
-// Generated HIDL files
+using android::hardware::configureRpcThreadpool;
+using android::hardware::joinRpcThreadpool;
 using android::hardware::bluetooth::V1_0::IBluetoothHci;
-using android::hardware::defaultPassthroughServiceImplementation;
+using android::hardware::bluetooth::V1_0::implementation::BluetoothHci;
+
+using namespace android;
 
 int main() {
-    return defaultPassthroughServiceImplementation<IBluetoothHci>(kMaxThreads);
+    status_t err;
+
+    configureRpcThreadpool(5, true);
+    sp<IBluetoothHci> hci = new BluetoothHci();
+    err = hci->registerAsService();
+    if (android::OK != err) {
+        LOG(FATAL) << "Unable to register bluetooth service: " << err;
+    }
+    joinRpcThreadpool();
+    return -1;
 }

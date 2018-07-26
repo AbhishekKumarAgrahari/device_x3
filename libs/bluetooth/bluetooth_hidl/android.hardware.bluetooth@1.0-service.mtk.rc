@@ -1,7 +1,8 @@
-service bluetooth-1-0 /vendor/bin/hw/android.hardware.bluetooth@1.0-service-mediatek
+service bluetooth-1-0 /vendor/bin/hw/android.hardware.bluetooth@1.0-service.mtk
     class hal
     user bluetooth
     group bluetooth
+    capabilities SYS_NICE
     writepid /dev/stune/foreground/tasks
 
 on property:vts.native_server.on=1 && property:ro.build.type=userdebug
